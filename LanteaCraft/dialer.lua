@@ -4,17 +4,24 @@
 -- to help control the LanteaCraft Stargate via a ComputerCraft
 -- peripheral.
 
+-- Script Configs
 local rednetWired = 'back'
 local rednetWireless = 'front'
 local stargateName = 'stargate_0'
 
+-- Rednet and Peripheral Connections
 rednet.open(rednetWired)
 rednet.open(redneetWireless)
-local stargate = peripheral.wrap(stargateName)
+sgPeripheral = peripheral.wrap(stargateName)
+
+-- Error Message Strings
+error_unrecognized_address = 'SGC: Unrecognized address or address configuration!'
+error_not_yet_implimented = 'Error: Not Yet Implimented!'
 
 -- Looks the address up on the Stargate Address Computer
 -- works for any addresses and aliases
-local function lookup_address(address)
+local function is_in_address_database(address)
+  print(error_not_yet_implimented)
   return false
 end
 
@@ -22,18 +29,21 @@ end
 local function check_address(address)
   local addressLength = string.len(address)
   if address == nil then
-    print('SGC: Unrecognized address or address configuration!')
+    print(error_unrecognized_address)
     return false
-  elseif lookup_address(address) then
+  elseif is_in_address_database(address) then
+    return true
+  elseif addressLength == 7 OR addressLength == 9 then
     return true
   else
-    print('SGC: Unrecognized address or address configuration!')
+    print(error_unrecognized_address)
     return false
   end
 end
 
-local function check_status()
-  print('SGC: Unauthorized stargate activity!')
+-- checks to see if the gate is in a spacific state.
+local function is_in_state(state)
+  print(error_not_yet_implimented)
   return false
 end
 
@@ -41,12 +51,13 @@ end
 -- the script. 
 function stargate_connect(address)
   if check_address(address) then
-    stargate.connect(address)
+    sgPeripheral.connect(address)
   end
 end
 
+-- disconnects the stargate if the gate is in the active state.
 function stargate_disconnect()
-  if check_state() then
-    stargate.disconnect()
+  if is_in_state('active') then
+    sgPeripheral.disconnect()
   end
 end
